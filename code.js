@@ -9,9 +9,9 @@ let dotSize = 1;
 let cx = w / 2;
 let cy = h / 2;
 
-let sRadius = 200;
-let mRadius = 200;
-let hRadius = 150;
+let sRadius = 500;
+let mRadius = 500;
+let hRadius = 450;
 
 let sAngle = 0;
 let mAngle = 0;
