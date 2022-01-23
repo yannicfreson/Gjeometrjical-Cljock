@@ -167,7 +167,7 @@ function animate() {
     // draw the centerpoint
     ctx.beginPath();
     ctx.setLineDash([]);
-    ctx.arc(cx, cy, w / 2, 0, Math.PI * 2, false);
+    ctx.arc(cx, cy, w / 2 - 1, 0, Math.PI * 2, false);
     ctx.closePath();
     ctx.stroke();
   }, 1000 / fps);
