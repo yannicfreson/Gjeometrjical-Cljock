@@ -127,12 +127,19 @@ function animate() {
     const hours = new Date().getHours();
 
     sAngle =
-      2 * Math.PI * ((seconds * 1000 + milliseconds) / 1000 / 60) -
+      2 * Math.PI * ((seconds * 1000 + milliseconds) / 60 / 1000) -
       0.5 * Math.PI;
     let newXS = cx + sRadius * Math.cos(sAngle);
     let newYS = cy + sRadius * Math.sin(sAngle);
 
-    mAngle = 2 * Math.PI * (minutes / 60) - 0.5 * Math.PI;
+    mAngle =
+      2 *
+        Math.PI *
+        ((minutes * 60 * 1000 + seconds * 1000 + milliseconds) /
+          60 /
+          60 /
+          1000) -
+      0.5 * Math.PI;
     let newXM = cx + mRadius * Math.cos(mAngle);
     let newYM = cy + mRadius * Math.sin(mAngle);
 
