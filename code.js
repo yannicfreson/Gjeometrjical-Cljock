@@ -143,7 +143,19 @@ function animate() {
     let newXM = cx + mRadius * Math.cos(mAngle);
     let newYM = cy + mRadius * Math.sin(mAngle);
 
-    hAngle = 2 * Math.PI * (hours / 12) - 0.5 * Math.PI;
+    //hAngle = 2 * Math.PI * (hours / 12) - 0.5 * Math.PI;
+    hAngle =
+      (2 *
+        Math.PI *
+        (hours * 60 * 60 * 1000 +
+          minutes * 60 * 1000 +
+          seconds * 1000 +
+          milliseconds)) /
+        12 /
+        60 /
+        60 /
+        1000 -
+      0.5 * Math.PI;
     let newXH = cx + hRadius * Math.cos(hAngle);
     let newYH = cy + hRadius * Math.sin(hAngle);
 
