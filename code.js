@@ -4,6 +4,10 @@ let ctx = canvas.getContext("2d");
 let w = canvas.width;
 let h = canvas.height;
 
+let darkTheme = true;
+
+let fillColor = "#ffffff";
+
 let dotSize = 0;
 
 let cx = w / 2;
@@ -20,8 +24,8 @@ let hAngle = 0;
 let fps = 60;
 
 function draw(sx, sy, mx, my, hx, hy) {
-  ctx.fillStyle = "#ffffff";
-  ctx.strokeStyle = "#ffffff";
+  ctx.fillStyle = fillColor;
+  ctx.strokeStyle = fillColor;
   ctx.lineWidth = 1;
   ctx.clearRect(0, 0, w, h);
   ctx.save();
@@ -143,7 +147,6 @@ function animate() {
     let newXM = cx + mRadius * Math.cos(mAngle);
     let newYM = cy + mRadius * Math.sin(mAngle);
 
-    //hAngle = 2 * Math.PI * (hours / 12) - 0.5 * Math.PI;
     hAngle =
       (2 *
         Math.PI *
