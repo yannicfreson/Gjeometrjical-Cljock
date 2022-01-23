@@ -4,14 +4,14 @@ let ctx = canvas.getContext("2d");
 let w = canvas.width;
 let h = canvas.height;
 
-let dotSize = 1;
+let dotSize = 0;
 
 let cx = w / 2;
 let cy = h / 2;
 
-let sRadius = 500;
-let mRadius = 500;
-let hRadius = 450;
+let sRadius = w / 2 - w * 0.05;
+let mRadius = sRadius;
+let hRadius = w / 2 - w * 0.15;
 
 let sAngle = 0;
 let mAngle = 0;
@@ -19,99 +19,89 @@ let hAngle = 0;
 
 let fps = 60;
 
-ctx.fillStyle = "#ffffff";
-ctx.strokeStyle = "#ffffff";
-
 function draw(sx, sy, mx, my, hx, hy) {
+  ctx.fillStyle = "#ffffff";
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 1;
   ctx.clearRect(0, 0, w, h);
   ctx.save();
 
-  //
-  //DRAW DOTS
-  //draw seconds dot
-  ctx.beginPath();
-  ctx.rect(sx - dotSize / 2, sy - dotSize / 2, dotSize, dotSize);
-  ctx.fill();
-  ctx.stroke();
-  ctx.restore();
+  function drawElement(arg1, arg2, arg3) {
+    ctx.beginPath();
+    ctx.rect(arg1, arg2, arg3, arg3);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
 
-  //draw minutes dot
-  ctx.beginPath();
-  ctx.rect(mx - dotSize / 2, my - dotSize / 2, dotSize, dotSize);
-  ctx.fill();
-  ctx.stroke();
-  ctx.restore();
+  function connectFullLines() {
+    //set full line
+    ctx.setLineDash([]);
+    //connect center and minutes
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(mx, my);
+    ctx.stroke();
 
-  //draw hourss dot
-  ctx.beginPath();
-  ctx.rect(hx - dotSize / 2, hy - dotSize / 2, dotSize, dotSize);
-  ctx.fill();
-  ctx.stroke();
-  ctx.restore();
+    //connect center and hours
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(hx, hy);
+    ctx.stroke();
 
-  //draw center dot
-  ctx.beginPath();
-  ctx.rect(cx - dotSize / 2, cy - dotSize / 2, dotSize, dotSize);
-  ctx.fill();
-  ctx.stroke();
-  ctx.restore();
+    //connect minutes and hours
+    ctx.beginPath();
+    ctx.moveTo(mx, my);
+    ctx.lineTo(hx, hy);
+    ctx.stroke();
+  }
 
-  //
-  //CONNECT FULL LINES
-  //connect center and minutes
-  ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(mx, my);
-  ctx.stroke();
+  function connectDottedLines() {
+    //set dotted line
+    ctx.setLineDash([2, 2]);
 
-  //connect center and hours
-  ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(hx, hy);
-  ctx.stroke();
+    //connect seconds and center
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(cx, cy);
+    ctx.stroke();
 
-  //connect minutes and hours
-  ctx.beginPath();
-  ctx.moveTo(mx, my);
-  ctx.lineTo(hx, hy);
-  ctx.stroke();
+    //connect seconds and hours
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(hx, hy);
+    ctx.stroke();
 
-  //
-  //CONNECT DOTTES LINES
-  //set dottes line
-  ctx.setLineDash([2, 2]);
+    //connect seconds and minutes
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(mx, my);
+    ctx.stroke();
+  }
 
-  //connect seconds and center
-  ctx.beginPath();
-  ctx.moveTo(sx, sy);
-  ctx.lineTo(cx, cy);
-  ctx.stroke();
+  function fillTriangle() {
+    ctx.fillStyle = "rgba(255,255,255,0.1)";
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(hx, hy);
+    ctx.lineTo(mx, my);
+    ctx.fill();
+  }
 
-  //connect seconds and hours
-  ctx.beginPath();
-  ctx.moveTo(sx, sy);
-  ctx.lineTo(hx, hy);
-  ctx.stroke();
-
-  //connect seconds and minutes
-  ctx.beginPath();
-  ctx.moveTo(sx, sy);
-  ctx.lineTo(mx, my);
-  ctx.stroke();
-
-  //set full line
-  ctx.setLineDash([]);
-
-  //
-  //FILL TRIANGLE
-  //draw triangle
-  ctx.fillStyle = "rgba(255,255,255,0.1)";
-  ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(hx, hy);
-  ctx.lineTo(mx, my);
-  ctx.fill();
-  ctx.fillStyle = "#ffffff";
+  //seconds point
+  drawElement(sx - dotSize / 2, sy - dotSize / 2, dotSize, dotSize);
+  //minutes point
+  drawElement(mx - dotSize / 2, my - dotSize / 2, dotSize, dotSize);
+  //hours point
+  drawElement(hx - dotSize / 2, hy - dotSize / 2, dotSize, dotSize);
+  //center point
+  drawElement(cx - dotSize / 2, cy - dotSize / 2, dotSize, dotSize);
+  //draw triangle between center, hours and mins
+  connectFullLines();
+  //draw dottes lines between center, hours, mins and seconds
+  connectDottedLines();
+  //fill triangle between center, hours and mins
+  fillTriangle();
 }
 
 window.requestAnimFrame = (function (callback) {
@@ -131,21 +121,22 @@ function animate() {
   setTimeout(function () {
     requestAnimFrame(animate);
 
+    const milliseconds = new Date().getMilliseconds();
+    const seconds = new Date().getSeconds();
+    const minutes = new Date().getMinutes();
+    const hours = new Date().getHours();
+
     sAngle =
-      2 *
-        Math.PI *
-        ((new Date().getSeconds() * 1000 + new Date().getMilliseconds()) /
-          1000 /
-          60) -
+      2 * Math.PI * ((seconds * 1000 + milliseconds) / 1000 / 60) -
       0.5 * Math.PI;
     let newXS = cx + sRadius * Math.cos(sAngle);
     let newYS = cy + sRadius * Math.sin(sAngle);
 
-    mAngle = 2 * Math.PI * (new Date().getMinutes() / 60) - 0.5 * Math.PI;
+    mAngle = 2 * Math.PI * (minutes / 60) - 0.5 * Math.PI;
     let newXM = cx + mRadius * Math.cos(mAngle);
     let newYM = cy + mRadius * Math.sin(mAngle);
 
-    hAngle = 2 * Math.PI * (new Date().getHours() / 12) - 0.5 * Math.PI;
+    hAngle = 2 * Math.PI * (hours / 12) - 0.5 * Math.PI;
     let newXH = cx + hRadius * Math.cos(hAngle);
     let newYH = cy + hRadius * Math.sin(hAngle);
 
@@ -153,9 +144,11 @@ function animate() {
 
     // draw the centerpoint
     ctx.beginPath();
-    ctx.arc(cx, cy, sRadius + 25, 0, Math.PI * 2, false);
+    ctx.setLineDash([]);
+    ctx.arc(cx, cy, w / 2, 0, Math.PI * 2, false);
     ctx.closePath();
     ctx.stroke();
   }, 1000 / fps);
 }
+
 animate();
