@@ -150,7 +150,7 @@ function animate() {
     hAngle =
       (2 *
         Math.PI *
-        ((hours - 1) * 60 * 60 * 1000 +
+        (hours * 60 * 60 * 1000 +
           minutes * 60 * 1000 +
           seconds * 1000 +
           milliseconds)) /
