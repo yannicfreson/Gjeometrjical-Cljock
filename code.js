@@ -4,7 +4,7 @@ let ctx = canvas.getContext("2d");
 let w = canvas.width;
 let h = canvas.height;
 
-let darkTheme = true;
+let circleVisible = true;
 
 let fillColor = "#ffffff";
 
@@ -164,13 +164,28 @@ function animate() {
 
     draw(newXS, newYS, newXM, newYM, newXH, newYH);
 
-    // draw the centerpoint
-    ctx.beginPath();
-    ctx.setLineDash([]);
-    ctx.arc(cx, cy, w / 2 - 1, 0, Math.PI * 2, false);
-    ctx.closePath();
-    ctx.stroke();
+    if (circleVisible) {
+      // draw the outer circle
+      ctx.beginPath();
+      ctx.setLineDash([]);
+      ctx.arc(cx, cy, w / 2 - 1, 0, Math.PI * 2, false);
+      ctx.closePath();
+      ctx.stroke();
+    }
   }, 1000 / fps);
+}
+
+document.addEventListener("keypress", handleKeypress);
+let clockWrapperElement = document.getElementById("clockWrapper");
+function handleKeypress(e) {
+  if (e.key === "c") {
+    circleVisible = !circleVisible;
+    if (circleVisible) {
+      clockWrapperElement.style.width = "90vmin";
+    } else if (!circleVisible) {
+      clockWrapperElement.style.width = "105vmin";
+    }
+  }
 }
 
 animate();
