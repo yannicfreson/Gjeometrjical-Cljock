@@ -192,6 +192,7 @@ function handleKeypress(e) {
 }
 
 function handleTouch(e) {
+  e.preventDefault();
   circleVisible = !circleVisible;
   if (circleVisible) {
     clockWrapperElement.style.width = "90vmin";
