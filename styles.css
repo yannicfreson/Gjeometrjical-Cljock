@@ -20,4 +20,5 @@ body {
 
 #clockWrapper {
   width: 90vmin;
+  transition: width 0.5s ease 0s;
 }
