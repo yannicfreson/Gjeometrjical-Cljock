@@ -176,7 +176,10 @@ function animate() {
 }
 
 document.addEventListener("keypress", handleKeypress);
+document.addEventListener("touchstart", handleTouch);
+
 let clockWrapperElement = document.getElementById("clockWrapper");
+
 function handleKeypress(e) {
   if (e.key === "c") {
     circleVisible = !circleVisible;
@@ -185,6 +188,15 @@ function handleKeypress(e) {
     } else if (!circleVisible) {
       clockWrapperElement.style.width = "105vmin";
     }
+  }
+}
+
+function handleTouch(e) {
+  circleVisible = !circleVisible;
+  if (circleVisible) {
+    clockWrapperElement.style.width = "90vmin";
+  } else if (!circleVisible) {
+    clockWrapperElement.style.width = "105vmin";
   }
 }
 
